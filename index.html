@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учебный план · История и Обществознание</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-800-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #12121a;
+    --card: #16161f;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8ee;
+    --muted: #8a8a99;
+    --b1: #f59e0b; --b1-soft: rgba(245,158,11,0.12);
+    --b2: #10b981; --b2-soft: rgba(16,185,129,0.12);
+    --b3: #3b82f6; --b3-soft: rgba(59,130,246,0.12);
+    --b4: #a855f7; --b4-soft: rgba(168,85,247,0.12);
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(168,85,247,0.12), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(59,130,246,0.10), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.08), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Header */
+  .hero { text-align: center; margin-bottom: 48px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    font-size: 12px; color: var(--muted);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; }
+  h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #a0a0b5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .subtitle { color: var(--muted); font-size: 17px; max-width: 640px; margin: 0 auto; }
+
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .stat:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-value.accent-1 { color: var(--b1); }
+  .stat-value.accent-2 { color: var(--b2); }
+  .stat-value.accent-3 { color: var(--b3); }
+  .stat-value.accent-4 { color: var(--b4); }
+
+  /* Filters */
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .filter-btn {
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { background: rgba(255,255,255,0.06); }
+  .filter-btn.active { background: #fff; color: #000; border-color: #fff; }
+  .filter-btn[data-block="1"].active { background: var(--b1); color: #000; border-color: var(--b1); }
+  .filter-btn[data-block="2"].active { background: var(--b2); color: #000; border-color: var(--b2); }
+  .filter-btn[data-block="3"].active { background: var(--b3); color: #fff; border-color: var(--b3); }
+  .filter-btn[data-block="4"].active { background: var(--b4); color: #fff; border-color: var(--b4); }
+
+  /* Table */
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+  thead th {
+    position: sticky; top: 0;
+    background: var(--bg-2);
+    padding: 18px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  .week-cell {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 600;
+  }
+  .week-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .week-meta { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .topic { font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .topic-sub { font-size: 12px; color: var(--muted); }
+  .cell-content { line-height: 1.55; }
+  .cell-content strong { color: #fff; font-weight: 600; }
+
+  .block-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .block-1 { background: var(--b1-soft); color: var(--b1); }
+  .block-2 { background: var(--b2-soft); color: var(--b2); }
+  .block-3 { background: var(--b3-soft); color: var(--b3); }
+  .block-4 { background: var(--b4-soft); color: var(--b4); }
+
+  .wnum-1 { background: var(--b1-soft); color: var(--b1); }
+  .wnum-2 { background: var(--b2-soft); color: var(--b2); }
+  .wnum-3 { background: var(--b3-soft); color: var(--b3); }
+  .wnum-4 { background: var(--b4-soft); color: var(--b4); }
+
+  .essay {
+    font-style: italic;
+    color: #d4d4dc;
+    font-size: 13px;
+  }
+
+  /* Block dividers */
+  .block-divider td {
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.02);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .block-divider.block-1 td { color: var(--b1); }
+  .block-divider.block-2 td { color: var(--b2); }
+  .block-divider.block-3 td { color: var(--b3); }
+  .block-divider.block-4 td { color: var(--b4); }
+
+  .hidden { display: none !important; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .wrap { padding: 24px 16px 60px; }
+    thead th, tbody td { padding: 12px 10px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="badge"><span class="dot"></span>Учебный план 2026</div>
+    <h1>История · Обществознание · Литература</h1>
+    <p class="subtitle">Интегрированный курс на 26 недель: от Древней Руси до XX века. История, обществознание, литература и документальное кино в единой системе.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Всего недель</div><div class="stat-value">26</div></div>
+    <div class="stat"><div class="stat-label">Блок I · IX–XV вв.</div><div class="stat-value accent-1">6</div></div>
+    <div class="stat"><div class="stat-label">Блок II · XVI–XVII вв.</div><div class="stat-value accent-2">6</div></div>
+    <div class="stat"><div class="stat-label">Блок III · XVIII в.</div><div class="stat-value accent-3">6</div></div>
+    <div class="stat"><div class="stat-label">Блок IV · XIX–XX вв.</div><div class="stat-value accent-4">8</div></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-block="all">Все блоки</button>
+    <button class="filter-btn" data-block="1">Блок I · Древняя Русь</button>
+    <button class="filter-btn" data-block="2">Блок II · XVI–XVII</button>
+    <button class="filter-btn" data-block="3">Блок III · XVIII век</button>
+    <button class="filter-btn" data-block="4">Блок IV · XIX–XX</button>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table id="plan">
+        <thead>
+          <tr>
+            <th>Блок / Неделя</th>
+            <th>Период / Тема</th>
+            <th>История</th>
+            <th>Обществознание</th>
+            <th>Литература</th>
+            <th>Документальное кино</th>
+            <th>Тема сочинения</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">© Учебный план · СУНЦ УрФУ</div>
+</div>
+
+<script>
+const data = [
+  {block:1,week:1,period:"Первые Рюриковичи и восточные славяне (IX–X вв.)",history:"Расселение славян, призвание варягов (862 г.), Олег, Игорь, Ольга, Святослав. Объединение Киева и Новгорода (882 г.). Всеобщая: Древняя Греция и Рим.",soc:"Общество как динамическая система, признаки традиционного общества.",lit:"М. Горький «Старуха Изергиль»",doc:"«Рюриковичи» (1 серия)",essay:"Роль лидера и морально-нравственных ценностей в формировании племенных традиций и общественного порядка."},
+  {block:1,week:2,period:"Расцвет Древней Руси и правовые основы (XI–XII вв.)",history:"Владимир I (Крещение Руси 988 г.), Ярослав Мудрый, Владимир Мономах. «Русская Правда».",soc:"Социальные нормы, право и его роль в жизни общества, функции государства.",lit:"М. Ю. Лермонтов «Песня про царя Ивана Васильевича...», лирика («Парус», «Бородино», «Родина»)",doc:"«Крещение Руси» (StarMedia)",essay:"Соотношение государственного закона, традиционного обычая и личной чести человека в обществе."},
+  {block:1,week:3,period:"Удельная Русь и раздробленность (XII–XIII вв.)",history:"Причины и последствия раздробленности. Владимиро-Суздальское, Новгородское и Галицко-Волынское княжества. Любечский съезд (1097 г.).",soc:"Формы государственно-территориального устройства, политические институты, конфликты.",lit:"«Слово о полку Игореве»",doc:"«Рюриковичи» (2 серия)",essay:"Единство народа и государства как ключевой фактор преодоления национальных кризисов."},
+  {block:1,week:4,period:"Борьба с внешними угрозами в XIII в.",history:"Монгольское завоевание (Битва на Калке 1223 г., поход Батыя 1237–1240 гг.), иго. Александр Невский (1240, 1242 гг.).",soc:"Внешняя и внутренняя безопасность государства, патриотизм и гражданская идентичность.",lit:"В. А. Жуковский. Баллады («Светлана», «Лесной царь», «Кубок»), элегии («Море», «Вечер»)",doc:"«Земля Героев. Александр Невский»",essay:"Проявление народного духа, веры и стойкости перед лицом смертельной внешней угрозы."},
+  {block:1,week:5,period:"Возвышение Москвы (XIV — нач. XV в.)",history:"Борьба Москвы и Твери. Иван Калита. Дмитрий Донской, Куликовская битва (1380 г.). Феодальная война.",soc:"Политическая власть, централизация, лидерство, роли социальных групп.",lit:"Д. И. Фонвизин «Недоросль»",doc:"«Куликово поле. Битва за Русь»",essay:"Проблема воспитания гражданина и выполнения долга перед Отечеством в эпоху централизации."},
+  {block:1,week:6,period:"Единое Русское государство (XV — нач. XVI в.)",history:"Иван III: Стояние на Угре (1480 г.), Судебник 1497 г. Василий III. Всеобщая: Падение Византии (1453 г.), ВГО.",soc:"Государственный суверенитет, сословно-представительная система, стратификация.",lit:"М. Горький «Челкаш»",doc:"«Рюриковичи» (3 серия)",essay:"Пробник № 1 (IX–XV вв.) + карточки с датами и терминами. Написание эссе."},
+
+  {block:2,week:7,period:"Правление Ивана IV Грозного (1533–1584 гг.)",history:"Венчание на царство (1547 г.), Избранная рада, Судебник 1550 г., Казань, Астрахань, Опричнина, Ливонская война. Всеобщая: Реформация.",soc:"Политический режим (авторитаризм, тоталитаризм), легитимность власти и принуждение.",lit:"А. С. Пушкин «Борис Годунов», поэма «Кавказский пленник»",doc:"«Рюриковичи» (4–5 серии)",essay:"Проблема моральной ответственности правителя и народной совести в драматические периоды истории."},
+  {block:2,week:8,period:"Смутное время (1598–1613 гг.)",history:"Борис Годунов, Лжедмитрий I, Шуйский, Семибоярщина, ополчения (Минин и Пожарский), Земский собор 1613 г.",soc:"Социальный кризис, анархия, гражданское общество, роль народного самосознания.",lit:"А. С. Пушкин «Капитанская дочка», «Повести Белкина»",doc:"«Смута» (док. сериал) / «Романовы» (1 серия)",essay:"Причины и разрушительные последствия социальных бунтов и Смуты для личности и общества."},
+  {block:2,week:9,period:"Первые Романовы (1613–1676 гг.)",history:"Михаил Федорович, Алексей Михайлович. Соборное уложение 1649 г. Соляной, Медный бунты, восстание Разина.",soc:"Правовые системы, закрепление социальных статусов, социальная мобильность и неравенство.",lit:"Н. В. Гоголь «Тарас Бульба», повесть «Шинель»",doc:"«Романовы» (1 серия)",essay:"Конфликт семейных, религиозных и государственно-патриотических ценностей в обществе."},
+  {block:2,week:10,period:"Церковный раскол и культура XVII в.",history:"Реформа патриарха Никона, церковный раскол (Аввакум), освоение Сибири, «бунташный век».",soc:"Духовная сфера, конформизм и девиантное поведение, роль религии и традиций.",lit:"Н. В. Гоголь «Ревизор»",doc:"«Романовы» (2 серия)",essay:"Бюрократизм, чинопочитание и духовное увядание как угроза стабильности общества."},
+  {block:2,week:11,period:"Конец XVII века и Зарубежная классика",history:"Федор Алексеевич, отмена местничества (1682 г.), Софья. Всеобщая: Английская революция, Просвещение.",soc:"Политическая система, государственный аппарат, реформы управления.",lit:"У. Шекспир «Гамлет», Сонеты",doc:"«История государства Российского»",essay:"Борьба личности с несправедливым мироустройством и нравственный выбор человека перед лицом зла."},
+  {block:2,week:12,period:"Повторение (XVI–XVII вв.)",history:"Систематизация дат, терминов (опричнина, закуп, кормление, ярмарка, мануфактура) и карт XVI–XVII вв.",soc:"Отработка комплексных заданий по блоку «Социология и политика».",lit:"А. С. Пушкин. Пьеса из цикла «Маленькие трагедии»",doc:"«История государства Российского»",essay:"Пробник № 2 (историческое эссе + тест) + эссе по обществознанию."},
+
+  {block:3,week:13,period:"Преобразования Петра I (Часть 1)",history:"Великое посольство, Северная война (1700–1721 гг. — Полтава, Гангут), флот. Провозглашение империи (1721 г.).",soc:"Модернизация, общественный прогресс и его цена, роль выдающихся личностей.",lit:"А. С. Пушкин «Медный всадник»",doc:"«Романовы» (3 серия)",essay:"Столкновение государственных интересов и ценности отдельной человеческой жизни в эпоху реформ."},
+  {block:3,week:14,period:"Реформы Петра I (Часть 2) и культура",history:"Сенат, Коллегии, Табель о рангах (1722 г.), Указ о престолонаследии. Изменения в быту и культуре.",soc:"Социальные институты, государственная служба, бюрократия и стратификация.",lit:"А. С. Грибоедов «Горе от ума»",doc:"«Петр Первый» (док. проект)",essay:"Проблема консерватизма и прогресса: конфликт передового мыслителя с сословным обществом."},
+  {block:3,week:15,period:"Дворцовые перевороты (1725–1762 гг.)",history:"Екатерина I, Петр II, Анна Иоанновна (Кондиции), Елизавета Петровна, Петр III (Манифест о вольности 1762 г.).",soc:"Политические элиты, лоббизм, фаворитизм, эволюция сословных прав.",lit:"Ж. Б. Мольер «Мещанин во дворянстве»",doc:"«Романовы» (4 серия)",essay:"Опасность мнимого просвещения, слепого подражания и лицемерия в высшем обществе."},
+  {block:3,week:16,period:"Просвещенный абсолютизм Екатерины II",history:"Уложенная комиссия (1767 г.), Восстание Пугачева (1773–1775 гг.), Жалованные грамоты дворянству и городам (1785 г.).",soc:"Идеология Просвещения, правовое государство, разделение властей, социальные конфликты.",lit:"Н. М. Карамзин «Бедная Лиза»",doc:"«Екатерина Великая» / «Романовы» (5 серия)",essay:"Внесословная ценность человеческой личности и проблема социального неравенства."},
+  {block:3,week:17,period:"Внешняя политика XVIII в. и Павел I",history:"Русско-турецкие войны (Суворов, Ушаков), Крым (1783 г.). Павел I (3-дневная барщина 1797 г.). Всеобщая: ВФР.",soc:"Внешняя политика государства, международное право, формы правления.",lit:"Н. В. Гоголь «Мертвые души», В. Гюго «Девяносто третий год»",doc:"«Суворов. Альпы» / «Романовы» (6 серия)",essay:"Духовное омертвение общества, гонка за материальной выгодой и деградация сословий."},
+  {block:3,week:18,period:"Повторение XVIII века",history:"Культурное наследие XVIII в. (Ломоносов, Державин, Растрелли), работа с картами.",soc:"Отработка блока «Экономика и рыночные отношения».",lit:"А. С. Пушкин. Лирика («К***», «Пророк», «Анчар», «Я памятник себе...»)",doc:"Обзорные серии по XVIII в.",essay:"Пробник № 3 + написание межпредметного сочинения."},
+
+  {block:4,week:19,period:"Александр I и Война 1812 г.",history:"Негласный комитет, указ о свободных хлебопашцах (1803 г.), Сперанский. Отечественная война 1812 г.",soc:"Политическая оппозиция, эволюционные и революционные пути развития общества.",lit:"А. С. Пушкин «Евгений Онегин»",doc:"«1812. Отечественная война» (4 серии)",essay:"Духовные искания передовой интеллигенции XIX века и проблема «лишнего человека»."},
+  {block:4,week:20,period:"Декабристы и Николай I (1825–1855 гг.)",history:"Восстание декабристов (1825 г.). Кодификация законов (Сперанский), теория официальной народности, Крымская война.",soc:"Государственная идеология, цензура, социальный контроль и официальные институты.",lit:"М. Ю. Лермонтов «Герой нашего времени», «Мцыри», «Маскарад»",doc:"«Декабристы» / «Романовы» (7 серия)",essay:"Влияние эпохи политической реакции и социального контроля на внутренний мир личности."},
+  {block:4,week:21,period:"Великие реформы Александра II",history:"Отмена крепостного права (1861 г.), Земская, Судебная, Военная реформы. Народничество, «Народная воля».",soc:"Социально-экономическая модернизация, становление капитализма, права человека.",lit:"И. С. Тургенев «Отцы и дети», «Ася», Л. Н. Толстой «После бала»",doc:"«Александр II. Освободитель»",essay:"Смена идеологических парадигм, конфликт поколений и мировоззрений в условиях перестройки."},
+  {block:4,week:22,period:"Контрреформы Александра III",history:"Политика контрреформ (цензура, земства). Промышленный подъем (Витте), рабочий класс, марксизм в России.",soc:"Экономические системы, рынок труда, пролетариат, социальные трансформации.",lit:"Р. Брэдбери «451° по Фаренгейту», Г. Уэллс, У. Голдинг «Повелитель мух»",doc:"«Романовы» (8 серия — начало)",essay:"Опасность тотального контроля, утраты человечности и сохранения духовной свободы."},
+  {block:4,week:23,period:"Николай II и Революция 1905–1907 гг.",history:"Русско-японская война, Революция 1905–1907 гг., Манифест 17 октября 1905 г., Государственная Дума.",soc:"Парламентаризм, многопартийность, политические движения, формы участия граждан.",lit:"А. П. Чехов. Рассказы, Э. Хемингуэй «Старик и море»",doc:"«1905 год. Первая революция»",essay:"Гуманизм, социальное отвержение и проблема сохранения человеческого достоинства."},
+  {block:4,week:24,period:"Реформы Столыпина и ПМВ (1906–1917 гг.)",history:"Столыпинская реформа. Первая мировая война (1914–1918 гг.). Падение династии Романовых (Февраль 1917 г.).",soc:"Глобальные катаклизмы, системный кризис государства, падение легитимности власти.",lit:"А. П. Чехов «Вишневый сад», М. А. Булгаков «Собачье сердце», М. А. Шолохов «Судьба человека»",doc:"«Первая мировая война» / «1917. Падение империи»",essay:"Неизбежность смены исторических эпох, уход старого мира и трагедия человека на переломе времен."},
+  {block:4,week:25,period:"Всеобщий обзор культуры и поэзии XX в.",history:"Зодчество, живопись, наука IX–XX вв., разбор исторических карт и схем сражений.",soc:"Систематизация понятий по 5 блокам (Человек и общество, Духовная, Социальная, Экономика, Право).",lit:"Поэзия XX в.: Маяковский, Есенин, Твардовский, Солженицын «Матренин двор»",doc:"Выпуски по архитектуре и живописи России",essay:"Нравственный подвиг простого человека и сохранение души в условиях исторических испытаний XX века."},
+  {block:4,week:26,period:"Финальный этап и симуляция",history:"Финальная зачистка пробелов, повторение терминов, дат и персоналий.",soc:"Финальная повторительная проработка понятий и определений.",lit:"Повторение ключевых цитат и аргументов",doc:"Финальный чек-лист",essay:"Итоговый генеральный пробник: Полный экзамен (История + Обществознание) + сочинение."}
+];
+
+const blockNames = {
+  1: "Блок I · Древняя Русь (IX–XV вв.)",
+  2: "Блок II · XVI–XVII века",
+  3: "Блок III · XVIII век · Империя",
+  4: "Блок IV · XIX – XX века"
+};
+
+const tbody = document.querySelector('#plan tbody');
+
+function render(filter = 'all') {
+  tbody.innerHTML = '';
+  let currentBlock = null;
+
+  data.forEach(row => {
+    if (filter !== 'all' && row.block !== parseInt(filter)) return;
+
+    if (row.block !== currentBlock) {
+      currentBlock = row.block;
+      const divider = document.createElement('tr');
+      divider.className = `block-divider block-${row.block}`;
+      divider.dataset.block = row.block;
+      divider.innerHTML = `<td colspan="7">◆ ${blockNames[row.block]}</td>`;
+      tbody.appendChild(divider);
+    }
+
+    const tr = document.createElement('tr');
+    tr.dataset.block = row.block;
+    tr.innerHTML = `
+      <td>
+        <div class="week-cell">
+          <div class="week-num wnum-${row.block}">${row.week}</div>
+          <div>
+            <div class="block-tag block-${row.block}">Блок ${row.block}</div>
+            <div class="week-meta">Неделя ${row.week}</div>
+          </div>
+        </div>
+      </td>
+      <td><div class="topic">${row.period}</div></td>
+      <td><div class="cell-content">${row.history}</div></td>
+      <td><div class="cell-content">${row.soc}</div></td>
+      <td><div class="cell-content">${row.lit}</div></td>
+      <td><div class="cell-content">${row.doc}</div></td>
+      <td><div class="essay">${row.essay}</div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+render();
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.block);
+  });
+});
+</script>
+</body>
+</html>
