@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-800-normal.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   :root {
     --bg: #0a0a0f;
     --bg-2: #12121a;
@@ -17,11 +18,63 @@
     --border: rgba(255,255,255,0.08);
     --text: #e8e8ee;
     --muted: #8a8a99;
+    --heading: linear-gradient(135deg, #fff 0%, #a0a0b5 100%);
+    --topic: #fff;
+    --cell-strong: #fff;
+    --essay: #d4d4dc;
+    --divider-bg: rgba(255,255,255,0.02);
+    --row-hover: rgba(255,255,255,0.02);
+    --filter-bg: var(--card);
+    --filter-border: var(--border);
+    --filter-text: var(--text);
+    --filter-hover: rgba(255,255,255,0.06);
+    --filter-active-bg: #fff;
+    --filter-active-text: #000;
+    --badge-bg: rgba(255,255,255,0.04);
+    --theme-btn-bg: rgba(255,255,255,0.06);
+    --theme-btn-border: var(--border);
+    --theme-btn-hover: rgba(255,255,255,0.12);
     --b1: #f59e0b; --b1-soft: rgba(245,158,11,0.12);
     --b2: #10b981; --b2-soft: rgba(16,185,129,0.12);
     --b3: #3b82f6; --b3-soft: rgba(59,130,246,0.12);
     --b4: #a855f7; --b4-soft: rgba(168,85,247,0.12);
+    --glow-1: rgba(168,85,247,0.12);
+    --glow-2: rgba(59,130,246,0.10);
+    --glow-3: rgba(245,158,11,0.08);
   }
+
+  html.light {
+    --bg: #f6f7fb;
+    --bg-2: #ffffff;
+    --card: #ffffff;
+    --border: rgba(15,23,42,0.08);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --heading: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+    --topic: #0f172a;
+    --cell-strong: #0f172a;
+    --essay: #374151;
+    --divider-bg: rgba(15,23,42,0.03);
+    --row-hover: rgba(15,23,42,0.03);
+    --filter-bg: #ffffff;
+    --filter-border: rgba(15,23,42,0.1);
+    --filter-text: #1f2937;
+    --filter-hover: rgba(15,23,42,0.05);
+    --filter-active-bg: #0f172a;
+    --filter-active-text: #ffffff;
+    --badge-bg: rgba(15,23,42,0.04);
+    --theme-btn-bg: #ffffff;
+    --theme-btn-border: rgba(15,23,42,0.1);
+    --theme-btn-hover: rgba(15,23,42,0.06);
+    --b1: #d97706; --b1-soft: rgba(217,119,6,0.12);
+    --b2: #059669; --b2-soft: rgba(5,150,105,0.12);
+    --b3: #2563eb; --b3-soft: rgba(37,99,235,0.12);
+    --b4: #9333ea; --b4-soft: rgba(147,51,234,0.12);
+    --glow-1: rgba(147,51,234,0.08);
+    --glow-2: rgba(37,99,235,0.07);
+    --glow-3: rgba(217,119,6,0.06);
+  }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
     background: var(--bg);
@@ -29,43 +82,84 @@
     min-height: 100vh;
     line-height: 1.5;
     overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
   }
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(168,85,247,0.12), transparent 50%),
-      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(59,130,246,0.10), transparent 50%),
-      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.08), transparent 50%);
+      radial-gradient(ellipse 80% 50% at 20% 0%, var(--glow-1), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 80% 10%, var(--glow-2), transparent 50%),
+      radial-gradient(ellipse 60% 50% at 50% 100%, var(--glow-3), transparent 50%);
     pointer-events: none;
     z-index: 0;
+    transition: background 0.4s ease;
   }
   .wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Theme toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--theme-btn-bg);
+    border: 1px solid var(--theme-btn-border);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .theme-toggle:hover {
+    background: var(--theme-btn-hover);
+    transform: rotate(15deg) scale(1.05);
+  }
+  .theme-toggle svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.5s ease, opacity 0.3s ease;
+  }
+  .theme-toggle .icon-sun,
+  .theme-toggle .icon-moon { position: absolute; }
+  html:not(.light) .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
+  html:not(.light) .theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
+  html.light .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
+  html.light .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
 
   /* Header */
   .hero { text-align: center; margin-bottom: 48px; }
   .badge {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 6px 14px; border-radius: 999px;
-    background: rgba(255,255,255,0.04);
+    background: var(--badge-bg);
     border: 1px solid var(--border);
     font-size: 12px; color: var(--muted);
     letter-spacing: 0.5px; text-transform: uppercase;
     margin-bottom: 20px;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
   }
   .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; }
   h1 {
     font-size: clamp(32px, 5vw, 56px);
     font-weight: 800;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #fff 0%, #a0a0b5 100%);
+    background: var(--heading);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 16px;
+    transition: background 0.4s ease;
   }
-  .subtitle { color: var(--muted); font-size: 17px; max-width: 640px; margin: 0 auto; }
+  .subtitle { color: var(--muted); font-size: 17px; max-width: 640px; margin: 0 auto; transition: color 0.3s; }
 
   /* Stats */
   .stats {
@@ -79,9 +173,9 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 20px;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.2s, border-color 0.2s, background 0.3s;
   }
-  .stat:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
+  .stat:hover { transform: translateY(-2px); border-color: rgba(128,128,128,0.3); }
   .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
   .stat-value { font-size: 28px; font-weight: 700; }
   .stat-value.accent-1 { color: var(--b1); }
@@ -98,18 +192,18 @@
   .filter-btn {
     padding: 10px 18px;
     border-radius: 12px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: var(--filter-bg);
+    border: 1px solid var(--filter-border);
+    color: var(--filter-text);
     font-size: 14px; font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
   }
-  .filter-btn:hover { background: rgba(255,255,255,0.06); }
-  .filter-btn.active { background: #fff; color: #000; border-color: #fff; }
-  .filter-btn[data-block="1"].active { background: var(--b1); color: #000; border-color: var(--b1); }
-  .filter-btn[data-block="2"].active { background: var(--b2); color: #000; border-color: var(--b2); }
+  .filter-btn:hover { background: var(--filter-hover); }
+  .filter-btn.active { background: var(--filter-active-bg); color: var(--filter-active-text); border-color: var(--filter-active-bg); }
+  .filter-btn[data-block="1"].active { background: var(--b1); color: #fff; border-color: var(--b1); }
+  .filter-btn[data-block="2"].active { background: var(--b2); color: #fff; border-color: var(--b2); }
   .filter-btn[data-block="3"].active { background: var(--b3); color: #fff; border-color: var(--b3); }
   .filter-btn[data-block="4"].active { background: var(--b4); color: #fff; border-color: var(--b4); }
 
@@ -119,6 +213,7 @@
     border: 1px solid var(--border);
     border-radius: 20px;
     overflow: hidden;
+    transition: background 0.3s, border-color 0.3s;
   }
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; min-width: 1200px; }
@@ -134,14 +229,16 @@
     color: var(--muted);
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
   }
   tbody tr { transition: background 0.15s; }
-  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody tr:hover { background: var(--row-hover); }
   tbody td {
     padding: 18px 16px;
     border-bottom: 1px solid var(--border);
     font-size: 14px;
     vertical-align: top;
+    transition: border-color 0.3s;
   }
   tbody tr:last-child td { border-bottom: none; }
   .week-cell {
@@ -156,10 +253,10 @@
     flex-shrink: 0;
   }
   .week-meta { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-  .topic { font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .topic { font-weight: 600; color: var(--topic); margin-bottom: 4px; transition: color 0.3s; }
   .topic-sub { font-size: 12px; color: var(--muted); }
   .cell-content { line-height: 1.55; }
-  .cell-content strong { color: #fff; font-weight: 600; }
+  .cell-content strong { color: var(--cell-strong); font-weight: 600; }
 
   .block-tag {
     display: inline-block;
@@ -181,14 +278,15 @@
 
   .essay {
     font-style: italic;
-    color: #d4d4dc;
+    color: var(--essay);
     font-size: 13px;
+    transition: color 0.3s;
   }
 
   /* Block dividers */
   .block-divider td {
     padding: 14px 16px;
-    background: rgba(255,255,255,0.02);
+    background: var(--divider-bg);
     font-weight: 700;
     font-size: 13px;
     text-transform: uppercase;
@@ -213,10 +311,22 @@
   @media (max-width: 768px) {
     .wrap { padding: 24px 16px 60px; }
     thead th, tbody td { padding: 12px 10px; font-size: 13px; }
+    .theme-toggle { top: 12px; right: 12px; width: 42px; height: 42px; }
   }
 </style>
 </head>
 <body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Переключить тему" title="Переключить тему">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
 <div class="wrap">
   <div class="hero">
     <div class="badge"><span class="dot"></span>Учебный план 2026</div>
@@ -263,6 +373,33 @@
 </div>
 
 <script>
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+const root = document.documentElement;
+
+function setTheme(theme) {
+  if (theme === 'light') {
+    root.classList.add('light');
+  } else {
+    root.classList.remove('light');
+  }
+  try { localStorage.setItem('theme', theme); } catch(e) {}
+}
+
+// Init theme
+const savedTheme = (() => { try { return localStorage.getItem('theme'); } catch(e) { return null; } })();
+if (savedTheme) {
+  setTheme(savedTheme);
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+  setTheme('light');
+}
+
+themeToggle.addEventListener('click', () => {
+  const isLight = root.classList.contains('light');
+  setTheme(isLight ? 'dark' : 'light');
+});
+
+// Table data
 const data = [
   {block:1,week:1,period:"Первые Рюриковичи и восточные славяне (IX–X вв.)",history:"Расселение славян, призвание варягов (862 г.), Олег, Игорь, Ольга, Святослав. Объединение Киева и Новгорода (882 г.). Всеобщая: Древняя Греция и Рим.",soc:"Общество как динамическая система, признаки традиционного общества.",lit:"М. Горький «Старуха Изергиль»",doc:"«Рюриковичи» (1 серия)",essay:"Роль лидера и морально-нравственных ценностей в формировании племенных традиций и общественного порядка."},
   {block:1,week:2,period:"Расцвет Древней Руси и правовые основы (XI–XII вв.)",history:"Владимир I (Крещение Руси 988 г.), Ярослав Мудрый, Владимир Мономах. «Русская Правда».",soc:"Социальные нормы, право и его роль в жизни общества, функции государства.",lit:"М. Ю. Лермонтов «Песня про царя Ивана Васильевича...», лирика («Парус», «Бородино», «Родина»)",doc:"«Крещение Руси» (StarMedia)",essay:"Соотношение государственного закона, традиционного обычая и личной чести человека в обществе."},
