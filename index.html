@@ -11,39 +11,8 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* Светлая тема по умолчанию */
   :root {
-    --bg: #0a0a0f;
-    --bg-2: #12121a;
-    --card: #16161f;
-    --border: rgba(255,255,255,0.08);
-    --text: #e8e8ee;
-    --muted: #8a8a99;
-    --heading: linear-gradient(135deg, #fff 0%, #a0a0b5 100%);
-    --topic: #fff;
-    --cell-strong: #fff;
-    --essay: #d4d4dc;
-    --divider-bg: rgba(255,255,255,0.02);
-    --row-hover: rgba(255,255,255,0.02);
-    --filter-bg: var(--card);
-    --filter-border: var(--border);
-    --filter-text: var(--text);
-    --filter-hover: rgba(255,255,255,0.06);
-    --filter-active-bg: #fff;
-    --filter-active-text: #000;
-    --badge-bg: rgba(255,255,255,0.04);
-    --theme-btn-bg: rgba(255,255,255,0.06);
-    --theme-btn-border: var(--border);
-    --theme-btn-hover: rgba(255,255,255,0.12);
-    --b1: #f59e0b; --b1-soft: rgba(245,158,11,0.12);
-    --b2: #10b981; --b2-soft: rgba(16,185,129,0.12);
-    --b3: #3b82f6; --b3-soft: rgba(59,130,246,0.12);
-    --b4: #a855f7; --b4-soft: rgba(168,85,247,0.12);
-    --glow-1: rgba(168,85,247,0.12);
-    --glow-2: rgba(59,130,246,0.10);
-    --glow-3: rgba(245,158,11,0.08);
-  }
-
-  html.light {
     --bg: #f6f7fb;
     --bg-2: #ffffff;
     --card: #ffffff;
@@ -73,6 +42,39 @@
     --glow-1: rgba(147,51,234,0.08);
     --glow-2: rgba(37,99,235,0.07);
     --glow-3: rgba(217,119,6,0.06);
+  }
+
+  /* Тёмная тема при наличии класса .dark на html */
+  html.dark {
+    --bg: #0a0a0f;
+    --bg-2: #12121a;
+    --card: #16161f;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8ee;
+    --muted: #8a8a99;
+    --heading: linear-gradient(135deg, #fff 0%, #a0a0b5 100%);
+    --topic: #fff;
+    --cell-strong: #fff;
+    --essay: #d4d4dc;
+    --divider-bg: rgba(255,255,255,0.02);
+    --row-hover: rgba(255,255,255,0.02);
+    --filter-bg: var(--card);
+    --filter-border: var(--border);
+    --filter-text: var(--text);
+    --filter-hover: rgba(255,255,255,0.06);
+    --filter-active-bg: #fff;
+    --filter-active-text: #000;
+    --badge-bg: rgba(255,255,255,0.04);
+    --theme-btn-bg: rgba(255,255,255,0.06);
+    --theme-btn-border: var(--border);
+    --theme-btn-hover: rgba(255,255,255,0.12);
+    --b1: #f59e0b; --b1-soft: rgba(245,158,11,0.12);
+    --b2: #10b981; --b2-soft: rgba(16,185,129,0.12);
+    --b3: #3b82f6; --b3-soft: rgba(59,130,246,0.12);
+    --b4: #a855f7; --b4-soft: rgba(168,85,247,0.12);
+    --glow-1: rgba(168,85,247,0.12);
+    --glow-2: rgba(59,130,246,0.10);
+    --glow-3: rgba(245,158,11,0.08);
   }
 
   body {
@@ -130,10 +132,12 @@
   }
   .theme-toggle .icon-sun,
   .theme-toggle .icon-moon { position: absolute; }
-  html:not(.light) .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
-  html:not(.light) .theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
-  html.light .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
-  html.light .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
+  
+  /* Иконка переключателя темы */
+  html:not(.dark) .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
+  html:not(.dark) .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
+  html.dark .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
+  html.dark .theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
 
   /* Header */
   .hero { text-align: center; margin-bottom: 48px; }
@@ -378,25 +382,27 @@ const themeToggle = document.getElementById('themeToggle');
 const root = document.documentElement;
 
 function setTheme(theme) {
-  if (theme === 'light') {
-    root.classList.add('light');
+  if (theme === 'dark') {
+    root.classList.add('dark');
   } else {
-    root.classList.remove('light');
+    root.classList.remove('dark');
   }
   try { localStorage.setItem('theme', theme); } catch(e) {}
 }
 
-// Init theme
+// Инициализация темы: светлая по умолчанию
 const savedTheme = (() => { try { return localStorage.getItem('theme'); } catch(e) { return null; } })();
 if (savedTheme) {
   setTheme(savedTheme);
-} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  setTheme('dark');
+} else {
   setTheme('light');
 }
 
 themeToggle.addEventListener('click', () => {
-  const isLight = root.classList.contains('light');
-  setTheme(isLight ? 'dark' : 'light');
+  const isDark = root.classList.contains('dark');
+  setTheme(isDark ? 'light' : 'dark');
 });
 
 // Table data
